@@ -23,12 +23,12 @@ class CreateEventsTable extends Migration
             $table->string('title');
             $table->datetime('date_time');
             $table->string('place');
-            $table->decimal('long', 10, 7);
-            $table->decimal('lat', 10, 7);
+            $table->decimal('long', 10, 7)->nullable();
+            $table->decimal('lat', 10, 7)->nullable();
             $table->string('speaker');
-            $table->string('poster');
+            $table->string('poster')->nullable();
             $table->string('description');
-            $table->enum('loop', ['0', '1']);
+            $table->enum('loop', ['0', '1'])->default('0');
             $table->timestamps();
         });
     }
