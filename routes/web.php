@@ -14,3 +14,17 @@
 $app->get('/', function () use ($app) {
     return $app->version();
 });
+
+$app->post('/login', 'LoginController@index');
+$app->post('/register', 'UserController@create');
+
+$app->group(['middleware' => 'auth'], function() use ($app) {
+	$app->get('/user/{id}', 'UserController@getUser');
+	
+	$app->get('/events', 'EventController@index');
+	$app->get('/event/detail/{id}', 'EventController@detail');
+	$app->post('/event', 'EventController@create');
+	$app->put('/event/{id}', 'EventController@update');
+	$app->delete('/event/{id}', 'EventController@delete');
+});
+

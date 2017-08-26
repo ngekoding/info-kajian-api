@@ -18,7 +18,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $fillable = [
-        'name', 'email',
+        'name', 'username', 'email', 'password', 'api_token'
     ];
 
     /**
@@ -27,6 +27,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $hidden = [
-        'password',
+        'password', 'api_token'
     ];
+
+    public function events() {
+        return $this->hasMany('App\Event', 'user_id');
+    }
 }
