@@ -12,7 +12,7 @@
 */
 
 $app->get('/', function () use ($app) {
-    return $app->version();
+    return 'Build with Lumen and Love by Nur Muhammad - blog.nurmuhammad@gmail.com';
 });
 
 $app->post('/login', 'LoginController@index');
