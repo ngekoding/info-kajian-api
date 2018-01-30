@@ -21,10 +21,11 @@ class CreateEventsTable extends Migration
                   ->on('users')
                   ->onDelete('cascade');
             $table->string('title');
-            $table->datetime('date_time');
+            $table->datetime('date_time_start');
+            $table->datetime('date_time_end');
             $table->string('place');
-            $table->decimal('long', 10, 7)->nullable();
             $table->decimal('lat', 10, 7)->nullable();
+            $table->decimal('long', 10, 7)->nullable();
             $table->string('speaker');
             $table->string('poster')->nullable();
             $table->string('description');

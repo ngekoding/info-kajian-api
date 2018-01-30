@@ -15,8 +15,11 @@ $app->get('/', function () use ($app) {
     return 'Build with Lumen and Love by Nur Muhammad - blog.nurmuhammad@gmail.com';
 });
 
+$app->get('/public/events', 'PublicController@index');
+$app->get('/public/event/{id}', 'PublicController@detail');
+
+// $app->post('/register', 'UserController@create');
 $app->post('/login', 'LoginController@index');
-$app->post('/register', 'UserController@create');
 
 $app->group(['middleware' => 'auth'], function() use ($app) {
 	$app->get('/user/{id}', 'UserController@getUser');

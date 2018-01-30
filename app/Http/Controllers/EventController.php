@@ -54,40 +54,50 @@ class EventController extends Controller
 	{
 		// Validating data
 		$validator = Validator::make($request->all(), [
-			'title' 		=> 'required',
-			'date_time' 	=> 'required',
-			'place'			=> 'required',
-			'speaker'		=> 'required',
-			'description' 	=> 'required'
+			'title' 			=> 'required',
+			'date_time_start' 	=> 'required',
+			'date_time_end' 	=> 'required',
+			'place'				=> 'required',
+			'speaker'			=> 'required',
+			'description' 		=> 'required'
 		]);
 
 		if ($validator->fails()) {
 			$res['success'] = false;
-			$res['message'] = $validator->messages();
+			$res['message'] = array_values($validator->messages()->all());
 			return response($res);
+		}
+
+		$imageName = NULL;
+		if (!empty($request->file('poster'))) {
+			$imageName  = time().'.'.$request->file('poster')->getClientOriginalExtension();
+			$uploadPath = base_path().'/public/assets/posters/';
+
+			$request->file('poster')->move($uploadPath, $imageName);
 		}
 
 		$event = new Event();
 
 		$event->fill([
-			'user_id'		=> $this->user_id,
-			'title'	  		=> $request->input('title'),
-			'date_time' 	=> $request->input('date_time'),
-			'place'			=> $request->input('place'),
-			'long'			=> $request->input('long'),
-			'lat'			=> $request->input('lat'),
-			'speaker'		=> $request->input('speaker'),
-			'poster'		=> $request->input('poster'),
-			'description' 	=> $request->input('description'),
-			'loop' 			=> $request->input('loop')
+			'user_id'			=> $this->user_id,
+			'title'	  			=> $request->input('title'),
+			'date_time_start' 	=> $request->input('date_time_start'),
+			'date_time_end' 	=> $request->input('date_time_end'),
+			'place'				=> $request->input('place'),
+			'lat'				=> $request->input('lat'),
+			'long'				=> $request->input('long'),
+			'speaker'			=> $request->input('speaker'),
+			'poster'			=> $imageName,
+			'description' 		=> $request->input('description'),
+			'loop' 				=> $request->input('loop')
 		]);
 		
 		if ($event->save()) {
 			$res['success'] = true;
-			$res['message'] = 'New event created.';
+			$res['message'] = ['New event created.'];
 		} else {
 			$res['success'] = false;
-			$res['message'] = 'Failed creating event.';
+			$res['message'] = ['Failed creating event.'];
 		}
 		return response($res);
 	}
@@ -96,37 +106,39 @@ class EventController extends Controller
 	{
 		// Validating data
 		$validator = Validator::make($request->all(), [
-			'title'			=> 'required',
-			'date_time' 	=> 'required',
-			'place'			=> 'required',
-			'speaker'		=> 'required',
-			'description' 	=> 'required'
+			'title' 			=> 'required',
+			'date_time_start' 	=> 'required',
+			'date_time_end' 	=> 'required',
+			'place'				=> 'required',
+			'speaker'			=> 'required',
+			'description' 		=> 'required'
 		]);
 
 		if ($validator->fails()) {
 			$res['success'] = false;
-			$res['message'] = $validator->messages();
+			$res['message'] = array_values($validator->messages()->all());
 			return response($res);
 		}
 
 		$event = Event::find($id);
 
-		$event->title 		= $request->input('title');
-		$event->date_time 	= $request->input('date_time');
-		$event->place 		= $request->input('place');
-		$event->long 		= $request->input('long');
-		$event->lat 	  	= $request->input('lat');
-		$event->speaker		= $request->input('speaker');
-		$event->poster 		= $request->input('poster');
-		$event->description = $request->input('description');
-		$event->loop 		= $request->input('loop');
+		$event->title 			= $request->input('title');
+		$event->date_time_start = $request->input('date_time_start');
+		$event->date_time_end 	= $request->input('date_time_end');
+		$event->place 			= $request->input('place');
+		$event->lat 	  		= $request->input('lat');
+		$event->long 			= $request->input('long');
+		$event->speaker			= $request->input('speaker');
+		$event->poster 			= $request->input('poster');
+		$event->description 	= $request->input('description');
+		$event->loop 			= $request->input('loop');
 
 		if ($event->save()) {
 			$res['success'] = true;
-			$res['message'] = 'Event updated.';
+			$res['message'] = ['Event updated.'];
 		} else {
 			$res['success'] = false;
-			$res['message'] = 'Failed updating event.';
+			$res['message'] = ['Failed updating event.'];
 		}
 		return response($res);
 	}
@@ -137,10 +149,10 @@ class EventController extends Controller
 		
 		if ($event->delete()) {
 			$res['success'] = true;
-			$res['message'] = 'Event deleted.';
+			$res['message'] = ['Event deleted.'];
 		} else {
 			$res['success'] = false;
-			$res['message'] = 'Failed deleting event.';
+			$res['message'] = ['Failed deleting event.'];
 		}
 		return response($res);
 
